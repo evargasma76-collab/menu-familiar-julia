@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú Familiar - Noviembre 2025</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+  <header class="bg-blue-600 text-white text-center py-6 shadow-md">
+    <h1 class="text-3xl font-bold">🍽️ Menú Familiar - Noviembre 2025</h1>
+    <p class="text-lg mt-2">Basado en el menú del colegio de Julia</p>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-6">
+      <button id="prevWeek" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow">⬅ Semana anterior</button>
+      <h2 id="weekTitle" class="text-2xl font-semibold text-center">Semana 1 (3-7 Nov)</h2>
+      <button id="nextWeek" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow">Semana siguiente ➡</button>
+    </div>
+
+    <div id="menuContainer" class="grid md:grid-cols-5 gap-4"></div>
+  </main>
+
+  <footer class="text-center py-4 bg-gray-200 text-gray-600 mt-10">
+    <p>Desarrollado por ChatGPT · Tailwind CSS desde CDN</p>
+  </footer>
+
+  <script>
+    const menusJulia = {
+      "3-7": {
+        Lunes: "Macarrones integrales con pavo y tomate, caballa al horno, pera y leche",
+        Martes: "Menestra con jamón, magro de cerdo con champiñones, plátano y leche",
+        Miércoles: "Sopa de cocido, garbanzos con carne, manzana y leche",
+        Jueves: "Patatas guisadas con pollo, merluza al horno, yogur natural",
+        Viernes: "Fiesta de la Almudena (no lectivo)"
+      },
+      "10-14": {
+        Lunes: "Arroz tres delicias, croquetas, pera y leche",
+        Martes: "Guisantes rehogados, tortilla de patata y calabacín, naranja y leche",
+        Miércoles: "Crema de verduras, albóndigas con patatas, manzana y leche",
+        Jueves: "Judías blancas, bacalao al horno, yogur",
+        Viernes: "Espaguetis integrales, merluza al ajo, mandarina y leche"
+      },
+      "17-21": {
+        Lunes: "Lentejas con calabaza, lacón a la gallega, plátano y leche",
+        Martes: "Patatas con calamares, tortilla francesa, naranja y leche",
+        Miércoles: "Garbanzos con cuscús, salmón al horno, pera y leche",
+        Jueves: "Judías verdes con tomate, wok de pollo con quinoa, actimel",
+        Viernes: "Pasta con atún, calamar frito, pera y leche"
+      },
+      "24-28": {
+        Lunes: "Sopa de cocido, garbanzos con carne, manzana y leche",
+        Martes: "Brócoli gratinado, pollo al ajillo, naranja y leche",
+        Miércoles: "Judías pintas con chorizo, huevos princesa, plátano y leche",
+        Jueves: "Jornada gastronómica: arroz a la zamorana, bacalao, helado",
+        Viernes: "No lectivo"
+      }
+    };
+
+    const comidasFamilia = {
+      base: [
+        "Ensalada de quinoa con pollo",
+        "Filete de salmón al horno con verduras",
+        "Paella mixta con verduras",
+        "Pollo al curry con arroz integral",
+        "Tacos de ternera con aguacate"
+      ],
+      cenas: [
+        "Crema de calabaza y tostadas integrales",
+        "Revuelto de espinacas con huevo",
+        "Sopa de verduras y pescado a la plancha",
+        "Tostadas con aguacate y jamón serrano",
+        "Puré de patata con merluza"
+      ]
+    };
+
+    let currentWeekIndex = 0;
+    const weeks = ["3-7", "10-14", "17-21", "24-28"];
+    const weekTitles = [
+      "Semana 1 (3-7 Nov)",
+      "Semana 2 (10-14 Nov)",
+      "Semana 3 (17-21 Nov)",
+      "Semana 4 (24-28 Nov)"
+    ];
+
+    function renderWeek() {
+      const weekKey = weeks[currentWeekIndex];
+      const menu = menusJulia[weekKey];
+      const container = document.getElementById("menuContainer");
+      const weekTitle = document.getElementById("weekTitle");
+      weekTitle.textContent = weekTitles[currentWeekIndex];
+
+      container.innerHTML = "";
+
+      Object.entries(menu).forEach(([dia, comida], i) => {
+        const comidaFamilia = comidasFamilia.base[i % comidasFamilia.base.length];
+        const cenaFamilia = comidasFamilia.cenas[i % comidasFamilia.cenas.length];
+
+        // Evita repetir el plato principal de Julia
+        const noRepetido = !comidaFamilia.toLowerCase().includes(comida.split(",")[0].split(" ")[0].toLowerCase())
+          ? comidaFamilia
+          : comidasFamilia.base[(i + 2) % comidasFamilia.base.length];
+
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl shadow-md p-4 border border-gray-200 hover:shadow-lg transition";
+        card.innerHTML = `
+          <h3 class="text-xl font-bold text-blue-600 mb-2">${dia}</h3>
+          <div class="mb-3">
+            <h4 class="font-semibold text-gray-700">🍎 Menú de Julia (Colegio):</h4>
+            <p class="text-sm text-gray-600">${comida}</p>
+          </div>
+          <div class="mb-3">
+            <h4 class="font-semibold text-gray-700">🏠 Comida Familiar:</h4>
+            <p class="text-sm text-gray-600">${noRepetido}</p>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-700">🌙 Cena Familiar:</h4>
+            <p class="text-sm text-gray-600">${cenaFamilia}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    document.getElementById("prevWeek").addEventListener("click", () => {
+      if (currentWeekIndex > 0) {
+        currentWeekIndex--;
+        renderWeek();
+      }
+    });
+
+    document.getElementById("nextWeek").addEventListener("click", () => {
+      if (currentWeekIndex < weeks.length - 1) {
+        currentWeekIndex++;
+        renderWeek();
+      }
+    });
+
+    renderWeek();
+  </script>
+</body>
+</html>
